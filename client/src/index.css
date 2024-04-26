@@ -1,0 +1,27 @@
+.App {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.address-form {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin: auto;
+}
+
+    .address-form label {
+        margin-bottom: 10px;
+    }
+
+    .address-form input[type='text'],
+    .address-form select {
+        padding: 5px;
+        margin-top: 5px;
+    }
+
+    .address-form button {
+        padding: 10px;
+        margin-top: 20px;
+        cursor: pointer;
+    }
