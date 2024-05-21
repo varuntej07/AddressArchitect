@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './App.css'; // Import the CSS file
+import './App.css';
 
 function HomePage() {
     const [address, setAddress] = useState({
@@ -27,14 +27,20 @@ function HomePage() {
             });
     };
 
-    const handleGlobalSearch = () => {
-        console.log('Global search initiated');
-        // Implement search functionality as needed
+    const [searchInput, setSearchInput] = useState("");
+
+    const handleChange = (e) => {
+        e.preventDefault();
+        setSearchInput(e.target.value);
     };
 
     return (
         <div className="App">
             <form onSubmit={handleSubmit} className="address-form">
+                <input type="search"
+                    placeholder="Search Globally here"
+                    onChange={handleChange}
+                    value={searchInput} />
                 <label>
                     Full Name:
                     <input type="text" name="name" value={address.name} onChange={handleInputChange} />
@@ -64,7 +70,6 @@ function HomePage() {
                     <input type="text" name="postalCode" value={address.postalCode} onChange={handleInputChange} />
                 </label>
                 <button type="submit">Submit</button>
-                <button type="button" onClick={handleGlobalSearch}>Global Search</button>
             </form>
         </div>
     );

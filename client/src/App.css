@@ -4,53 +4,77 @@
     align-items: center;
     min-height: 100vh;
     background-color: #f0f0f0;
-    font-family: Arial, sans-serif;
+    font-family: sans-serif;
 }
 
 .address-form {
-    background-color: #fff;
+    background-color: #ffffff;
     padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 320px;
     display: flex;
     flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.address-form label {
-    margin-bottom: 10px;
-    font-weight: bold;
-}
+    .address-form:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
 
-.address-form input,
-.address-form select {
-    margin-top: 5px;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-    box-sizing: border-box;
-}
+    .address-form label {
+        margin-bottom: 10px;
+        font-weight: bold;
+        color: #333;
+    }
 
-.address-form button {
-    margin-top: 15px;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-weight: bold;
-}
+    .address-form input,
+    .address-form select {
+        margin-top: 5px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        width: 100%;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
 
-.address-form button:hover {
-    background-color: #0056b3;
-}
+        .address-form input:focus,
+        .address-form select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            outline: none;
+        }
 
-.address-form button[type="button"] {
-    background-color: #6c757d;
-}
+    .address-form button {
+        margin-top: 20px;
+        padding: 12px;
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
 
-.address-form button[type="button"]:hover {
-    background-color: #5a6268;
-}
+        .address-form button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+    .address-form input[type="search"] {
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 2px solid #007bff;
+        border-radius: 5px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+        .address-form input[type="search"]:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
+            outline: none;
+        }
