@@ -50,6 +50,7 @@ function HomePage() {
                     <select name="country" value={address.country} onChange={handleInputChange}>
                         <option value="usa">USA</option>
                         <option value="canada">Canada</option>
+                        <option value="India">India</option>
                         <option value="uk">UK</option>
                     </select>
                 </label>

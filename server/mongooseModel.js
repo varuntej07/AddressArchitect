@@ -7,12 +7,12 @@ mongoose.connect('mongodb://localhost/AddressData', {
     .catch(err => console.log(err));
 
 const addressSchema = new mongoose.Schema({
-    fullname: String,
+    name: String,
     country: String,
     street: String,
     city: String,
     state: String,
-    zip: String,
+    postalCode: Number,
     search: String
 });
 
