@@ -141,52 +141,49 @@ function HomePage() {
                     onChange={handleChange}
                     value={searchInput} />
                 <label>
-                    Full Name:
-                    <input type="text" name="name" placeholder="AbdAllah Sai Varun" value={address.name} onChange={handleInputChange} />
+                Full Name:
+                    <input type="text" name="name" placeholder="AbdAllah Sai Varun" value={address.name} onChange={handleInputChange} required />
                 </label>
                 <label>
                     Country:
-                        <select name="country" value={address.country} onChange={handleInputChange}>
-                            {countries.map((country, index) => (
-                                <option key={index} value={country}>{country}</option>
-                            ))}
-                        </select>
+                    <select name="country" value={address.country} onChange={handleInputChange} required>
+                        <option value="" disabled>Select your country</option>
+                        {countries.map((country, index) => (
+                            <option key={index} value={country}>{country}</option>
+                        ))}
+                    </select>
                 </label>
                 <label>
                     Address 1:
-                    <input type="text" name="street1" placeholder="123 Main St" value={address.street1} onChange={handleInputChange} />
+                    <input type="text" name="street1" placeholder="123 Main St" value={address.street1} onChange={handleInputChange} required />
                 </label>
                 <label>
                     Address 2:
-                    <input type="text" name="street2" placeholder="Apt, Suite, Unit. (optional)" value={address.street2} onChange={handleInputChange} />
+                    <input type="text" name="street2" placeholder="Apt, Suite, etc. (optional)" value={address.street2} onChange={handleInputChange} />
                 </label>
                 <label>
                     City:
-                    <input type="text" name="city" placeholder="City" value={address.city} onChange={handleInputChange} />
+                    <input type="text" name="city" placeholder="City" value={address.city} onChange={handleInputChange} required />
                 </label>
                 
-                {address.country && regionData[address.country] ? (
+                {address.country && (
                     <label>
-                        {address.country === "United States" || address.country === "Canada" ? "State/Province" : "Region"}:
-                        <select name="state" value={address.state} onChange={handleInputChange}>
-                            <option value="">Select a {address.country === "United States" || address.country === "Canada" ? "State/Province" : "Region"}</option>
-                            {regionData[address.country].map((region, index) => (
+                        {address.country === "United States" || address.country === "Canada" ? "State/Province" : "State/Region/Province"}:
+                        <select name="state" value={address.state} onChange={handleInputChange} required={regionData[address.country]}>
+                            <option value="" disabled>Select your state/region/province</option>
+                            {(regionData[address.country] || []).map((region, index) => (
                                 <option key={index} value={region}>{region}</option>
                             ))}
+                            {!(regionData[address.country]) && (
+                                <option value="Other">Other</option>
+                            )}
                         </select>
                     </label>
-                ) : (
-                    <label>
-                        State/Region/Province:
-                        <input type="text" name="state" value={address.state} onChange={handleInputChange} />
-                    </label>
                 )}
-                
-
 
                 <label>
                     ZIP/Postal Code:
-                    <input type="text" name="postalCode" value={address.postalCode} onChange={handleInputChange} />
+                    <input type="text" name="postalCode" placeholder="Postal Code" value={address.postalCode} onChange={handleInputChange} required pattern="[0-9]*"/>
                 </label>
                 <button type="submit">Submit</button>
             </form>
