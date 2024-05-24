@@ -142,7 +142,7 @@ function HomePage() {
                     value={searchInput} />
                 <label>
                     Full Name:
-                    <input type="text" name="name" value={address.name} onChange={handleInputChange} />
+                    <input type="text" name="name" placeholder="AbdAllah Sai Varun" value={address.name} onChange={handleInputChange} />
                 </label>
                 <label>
                     Country:
@@ -154,27 +154,36 @@ function HomePage() {
                 </label>
                 <label>
                     Address 1:
-                    <input type="text" name="street" value={address.street} onChange={handleInputChange} />
+                    <input type="text" name="street1" placeholder="123 Main St" value={address.street1} onChange={handleInputChange} />
                 </label>
                 <label>
                     Address 2:
-                    <input type="text" name="street" value={address.street} onChange={handleInputChange} />
+                    <input type="text" name="street2" placeholder="Apt, Suite, Unit. (optional)" value={address.street2} onChange={handleInputChange} />
                 </label>
                 <label>
                     City:
-                    <input type="text" name="city" value={address.city} onChange={handleInputChange} />
+                    <input type="text" name="city" placeholder="City" value={address.city} onChange={handleInputChange} />
                 </label>
                 
-                {address.country && regionData[address.country] && (
+                {address.country && regionData[address.country] ? (
                     <label>
                         {address.country === "United States" || address.country === "Canada" ? "State/Province" : "Region"}:
                         <select name="state" value={address.state} onChange={handleInputChange}>
+                            <option value="">Select a {address.country === "United States" || address.country === "Canada" ? "State/Province" : "Region"}</option>
                             {regionData[address.country].map((region, index) => (
                                 <option key={index} value={region}>{region}</option>
                             ))}
                         </select>
                     </label>
+                ) : (
+                    <label>
+                        State/Region/Province:
+                        <input type="text" name="state" value={address.state} onChange={handleInputChange} />
+                    </label>
                 )}
+                
+
+
                 <label>
                     ZIP/Postal Code:
                     <input type="text" name="postalCode" value={address.postalCode} onChange={handleInputChange} />
