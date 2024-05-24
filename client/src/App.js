@@ -166,24 +166,26 @@ function HomePage() {
                     <input type="text" name="city" placeholder="City" value={address.city} onChange={handleInputChange} required />
                 </label>
                 
-                {address.country && (
+                {address.country && regionData[address.country] ? (
                     <label>
-                        {address.country === "United States" || address.country === "Canada" ? "State/Province" : "State/Region/Province"}:
-                        <select name="state" value={address.state} onChange={handleInputChange} required={regionData[address.country]}>
-                            <option value="" disabled>Select your state/region/province</option>
-                            {(regionData[address.country] || []).map((region, index) => (
+                        {address.country === "United States" || address.country === "Canada" ? "State/Province" : "Region"}:
+                        <select name="state" value={address.state} onChange={handleInputChange}  required={regionData[address.country]}>
+                            <option value="">Select a {address.country === "United States" || address.country === "Canada" ? "State/Province" : "Region"}</option>
+                            {regionData[address.country].map((region, index) => (
                                 <option key={index} value={region}>{region}</option>
                             ))}
-                            {!(regionData[address.country]) && (
-                                <option value="Other">Other</option>
-                            )}
                         </select>
+                    </label>
+                ) : (
+                    <label>
+                        State/Region/Province:
+                        <input type="text" name="state" placeholder= "State/Region/Province" value={address.state} onChange={handleInputChange} />
                     </label>
                 )}
 
                 <label>
                     ZIP/Postal Code:
-                    <input type="text" name="postalCode" placeholder="Postal Code" value={address.postalCode} onChange={handleInputChange} required pattern="[0-9]*"/>
+                    <input type="text" name="postalCode" placeholder="12345" value={address.postalCode} onChange={handleInputChange} required pattern="[0-9]{5}"/>
                 </label>
                 <button type="submit">Submit</button>
             </form>
