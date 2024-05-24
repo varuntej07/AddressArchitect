@@ -100,24 +100,28 @@ const regionData = {
     "United Kingdom": ukRegions
 };
 
-
 function HomePage() {
     const [address, setAddress] = useState({
         name: '',
         country: '',
-        street: '',
+        addressLine1: '',
+        addressLine2: '',
         city: '',
-        state: '',
+        region: '',
         postalCode: '',
     });
 
     const handleInputChange = (e) => {
-        setAddress({ ...address, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        setAddress(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Clicked on submit button, saving address...');
+        console.log('Submitting address:', address);
         axios.post('http://localhost:5000/api/addresses', address)
             .then(response => {
                 console.log('Address saved:', response.data);
@@ -141,12 +145,11 @@ function HomePage() {
                     onChange={handleChange}
                     value={searchInput} />
                 <label>
-                Full Name:
-                    <input type="text" name="name" placeholder="AbdAllah Sai Varun" value={address.name} onChange={handleInputChange} required />
+                    Full Name: <input type="text" name="name" placeholder="AbdAllah Varun"
+                        value={address.name} onChange={handleInputChange} required />
                 </label>
                 <label>
-                    Country:
-                    <select name="country" value={address.country} onChange={handleInputChange} required>
+                    Country: <select name="country" value={address.country} onChange={handleInputChange} required>
                         <option value="" disabled>Select your country</option>
                         {countries.map((country, index) => (
                             <option key={index} value={country}>{country}</option>
@@ -154,22 +157,22 @@ function HomePage() {
                     </select>
                 </label>
                 <label>
-                    Address 1:
-                    <input type="text" name="street1" placeholder="123 Main St" value={address.street1} onChange={handleInputChange} required />
+                    Address 1: <input type="text" name="addressLine1" placeholder="123 Main St"
+                        value={address.addressLine1} onChange={handleInputChange} required />
                 </label>
                 <label>
-                    Address 2:
-                    <input type="text" name="street2" placeholder="Apt, Suite, etc. (optional)" value={address.street2} onChange={handleInputChange} />
+                    Address 2: <input type="text" name="addressLine2" placeholder="Apt, Suite, etc. (optional)"
+                        value={address.addressLine2} onChange={handleInputChange} />
                 </label>
                 <label>
-                    City:
-                    <input type="text" name="city" placeholder="City" value={address.city} onChange={handleInputChange} required />
+                    City: <input type="text" name="city" placeholder="City" value={address.city}
+                        onChange={handleInputChange} required />
                 </label>
-                
+
                 {address.country && regionData[address.country] ? (
                     <label>
                         {address.country === "United States" || address.country === "Canada" ? "State/Province" : "Region"}:
-                        <select name="state" value={address.state} onChange={handleInputChange}  required={regionData[address.country]}>
+                        <select name="region" value={address.region} onChange={handleInputChange} required>
                             <option value="">Select a {address.country === "United States" || address.country === "Canada" ? "State/Province" : "Region"}</option>
                             {regionData[address.country].map((region, index) => (
                                 <option key={index} value={region}>{region}</option>
@@ -178,14 +181,14 @@ function HomePage() {
                     </label>
                 ) : (
                     <label>
-                        State/Region/Province:
-                        <input type="text" name="state" placeholder= "State/Region/Province" value={address.state} onChange={handleInputChange} />
+                            State/Region/Province: <input type="text" name="region"
+                                placeholder="State/Region/Province" value={address.region} onChange={handleInputChange} />
                     </label>
                 )}
 
                 <label>
-                    ZIP/Postal Code:
-                    <input type="text" name="postalCode" placeholder="12345" value={address.postalCode} onChange={handleInputChange} required pattern="[0-9]{5}"/>
+                    ZIP/Postal Code: <input type="text" name="postalCode" placeholder="12345"
+                        value={address.postalCode} onChange={handleInputChange} required />
                 </label>
                 <button type="submit">Submit</button>
             </form>

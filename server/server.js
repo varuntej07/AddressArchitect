@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const Address = require('./mongooseModel'); 
+const { Address, saveAddress } = require('./mongooseModel');
 
 const cors = require('cors');
 app.use(cors());
@@ -13,14 +13,13 @@ app.get('/api', (req, res) => {
 });
 
 app.post('/api/addresses', async (req, res) => {
-    console.log("tryna save ya address!")
+    console.log("tryna save ya address!", req.body)
     try {
-        const newAddress = new Address(req.body);
-        await newAddress.save();
-        res.status(201).send("Address saved successfully!");
+        const address = await saveAddress(req.body);
+        res.status(201).json(address);
     } catch (error) {
-        console.error("Oops! something went wrong", error);
-        res.status(400).send("Oops! something went wrong");
+        console.error("Error saving address:", error); 
+        res.status(500).json({ error: 'Oops! Error saving address', details: error.message });
     }
 });
 
