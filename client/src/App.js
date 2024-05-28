@@ -6,6 +6,8 @@ import { countries, regionData, countryFormats } from './countryData';
 
 function HomePage() {
     const [address, setAddress] = useState({
+        salutation: '',
+        company: '',
         name: '',
         country: '',
         addressLine1: '',
@@ -15,13 +17,14 @@ function HomePage() {
         city: '',
         region: '',
         postalCode: '',
-        company: '',
-        salutation: ''
     });
 
     const [query, setQuery] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [errors, setErrors] = useState({});
+    const [selectedCountry1, setSelectedCountry1] = useState('');
+    const [selectedCountry2, setSelectedCountry2] = useState('');
+    const [citySuggestions, setCitySuggestions] = useState('');
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -54,7 +57,7 @@ function HomePage() {
             return;
         }
 
-        console.log('Submitting address:', address);
+        console.log('Submitting address:');
         axios.post('http://localhost:5000/api/addresses', address)
             .then(response => {
                 console.log('Address saved:', response.data);
@@ -92,19 +95,6 @@ function HomePage() {
         </div>
     );
 
-    const { labels = {} } = countryFormats[address.country] || {};
-
-    const inputProps = {
-        placeholder: 'Search Globally here',
-        value: query,
-        onChange: handleSearchChange
-    };
-
-    const [selectedCountry1, setSelectedCountry1] = useState('');
-    const [selectedCountry2, setSelectedCountry2] = useState('');
-
-    const [citySuggestions, setCitySuggestions] = useState('');
-
     const handleCityChange = (e, { newValue }) => {
         setAddress(prevState => ({
             ...prevState,
@@ -116,14 +106,14 @@ function HomePage() {
         const country = address.country;
         if (country && value.length > 0) {
             const states = regionData[country] || {};
-            const cities = Object.values(states).flat(); //creates a new array with all the cities
-            //console.log(cities);
+            const cities = Object.values(states).flat(); // creates a new array with all the cities
             const filteredCities = cities.filter(city => city.toLowerCase().startsWith(value.toLowerCase()));
             setCitySuggestions(filteredCities);
         } else {
             setCitySuggestions([]);
         }
     };
+
     const handleCitySuggestionsClearRequested = () => {
         setCitySuggestions([]);
     };
@@ -136,19 +126,27 @@ function HomePage() {
         </div>
     );
 
+    const { labels = {} } = countryFormats[address.country] || {};
+
+    const inputProps = {
+        placeholder: 'Search Globally here',
+        value: query,
+        onChange: handleSearchChange
+    };
+
     return (
         <div className="App">
             <form onSubmit={handleSubmit} className="address-form">
-                <label>
-                    {labels.name || 'Name'}: <input type="text" name="name" placeholder="AbdAllah Varun"
-                        value={address.name} onChange={handleInputChange} required />
-                </label>
                 {labels.salutation && (
                     <label>
                         {labels.salutation}: <input type="text" name="salutation" placeholder="Mr/Ms"
                             value={address.salutation} onChange={handleInputChange} />
                     </label>
                 )}
+                <label>
+                    {labels.name || 'Name'}: <input type="text" name="name"
+                        value={address.name} onChange={handleInputChange} required />
+                </label>
                 {labels.company && (
                     <label>
                         {labels.company}: <input type="text" name="company" placeholder="Company (optional)"
@@ -164,12 +162,12 @@ function HomePage() {
                     </select>
                 </label>
                 <label>
-                    {labels.addressLine1 || 'Address Line 1'}: <input type="text" name="addressLine1" placeholder="123 Main St"
+                    {labels.addressLine1 || 'Address Line 1'}: <input type="text" name="addressLine1" placeholder="Street"
                         value={address.addressLine1} onChange={handleInputChange} required />
                 </label>
                 {labels.addressLine2 && (
                     <label>
-                        {labels.addressLine2}: <input type="text" name="addressLine2" placeholder="Apt, Suite, etc. (optional)"
+                        {labels.addressLine2}: <input type="text" name="addressLine2"
                             value={address.addressLine2} onChange={handleInputChange} />
                     </label>
                 )}
@@ -194,7 +192,6 @@ function HomePage() {
                         getSuggestionValue={getCitySuggestionValue}
                         renderSuggestion={renderCitySuggestion}
                         inputProps={{
-                            placeholder: 'City',
                             value: address.city,
                             onChange: handleCityChange
                         }}
@@ -203,9 +200,14 @@ function HomePage() {
 
                 {address.country && regionData[address.country] ? (
                     <label>
-                        {address.country === "United States" || address.country === "Canada" ? "State/Province" : "State"}:
+                        {address.country === "Japan" ? "Prefecture" :
+                            address.country === "United States" ? "State" :
+                                address.country === "Canada" ? "Province" :
+                                    address.country === "India" ? "State" : "Region"
+                        }:
                         <select name="region" value={address.region} onChange={handleInputChange} required>
-                            <option value="">Select a {address.country === "United States" || address.country === "Canada" ? "State/Province" : "Region"}</option>
+                            <option value="">Select a {address.country === "Japan" ? "Prefecture" :
+                                address.country === ("India" && "United States") || address.country === "Canada" ? "State/Province" : "State"}</option>
                             {Object.keys(regionData[address.country]).map((region, index) => (
                                 <option key={index} value={region}>{region}</option>
                             ))}
@@ -214,7 +216,7 @@ function HomePage() {
                 ) : (
                     <label>
                         {labels.region || 'State/Region/Province'}: <input type="text" name="region"
-                             value={address.region} onChange={handleInputChange} />
+                            value={address.region} onChange={handleInputChange} />
                     </label>
                 )}
 

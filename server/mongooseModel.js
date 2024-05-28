@@ -14,6 +14,10 @@ const IntAddressSchema = new mongoose.Schema({
     city: { type: String, required: true },
     region: { type: String, required: true },
     postalCode: { type: String, required: true },
+    salutation: { type: String },
+    company: { type: String },
+    locality: { type: String },
+    neighborhood: { type: String },
 });
 
 const Address = mongoose.model('Address', IntAddressSchema);

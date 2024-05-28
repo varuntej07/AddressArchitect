@@ -18,69 +18,76 @@ app.get('/search', async (req, res) => {
     const regex = new RegExp(query, 'i');
     const results = await Address.find({
         $or: [
+            { salutation: regex },
+            { company: regex },
             { name: regex },
             { addressLine1: regex },
             { addressLine2: regex },
+            { neighborhood: regex },
+            { locality: regex },
             { city: regex },
             { region: regex },
-            { postalCode: regex }
+            { postalCode: regex },
+            { country: regex }
         ]
     }).lean();
 
     const formattedResults = results.map(address => {
         const countryFormat = countryFormats[address.country];
+        let formattedAddress = '';
         if (countryFormat) {
             const format = countryFormat.format;
-            const formattedAddress = format
-                .replace("{name}", address.name)
-                .replace("{addressLine1}", address.addressLine1)
+            formattedAddress = format
+                .replace("{salutation}", address.salutation || "")
+                .replace("{name}", address.name || "")
+                .replace("{company}", address.company || "")
+                .replace("{addressLine1}", address.addressLine1 || "")
                 .replace("{addressLine2}", address.addressLine2 || "")
-                .replace("{city}", address.city)
-                .replace("{region}", address.region)
-                .replace("{postalCode}", address.postalCode)
-                .replace("{country}", address.country || "")
-                .replace("{neighbourhood}", address.neighbourhood || "");
-            return {
-                ...address,
-                formattedAddress
-            };
+                .replace("{locality}", address.locality || "")
+                .replace("{city}", address.city || "")
+                .replace("{region}", address.region || "")
+                .replace("{postalCode}", address.postalCode || "")
+                .replace("{country}", address.country || "");
         } else {
-            return {
-                ...address,
-                formattedAddress: `${address.addressLine1}, ${address.addressLine2 || ''}, ${address.city}, ${address.region}, ${address.postalCode}`
-            };
+            formattedAddress = `${address.salutation || ''} ${address.name || ''}, ${address.company || ''} ${address.addressLine1 || ''} ${address.addressLine2 || ''} ${address.locality || ''} ${address.city || ''} ${address.region || ''} ${address.postalCode || ''} ${address.country || ''}`;
         }
+
+        // Removing commas from the formatted address in the suggestions
+        formattedAddress = formattedAddress.replace(/,/g, ' ');
+
+        return {
+            ...address,
+            formattedAddress
+        };
     });
 
     res.json(formattedResults);
 });
+app.get('/api', (req, res) => {
+    res.json({ 'address': ['address1', 'address2', 'address3..'] });
+});
+app.post('/api/addresses', async (req, res) => {
+    console.log("tryna save ya address!", req.body)
+    try {
+        const address = await saveAddress(req.body);
+        res.status(201).json(address);
+    } catch (error) {
+        console.error("Error saving address:", error);
+        res.status(500).json({ error: 'Oops! Error saving address', details: error.message });
+    }
+});
 
-    app.get('/api', (req, res) => {
-        res.json({ 'address': ['address1', 'address2', 'address3..'] });
-    });
+app.get('/api/addresses', async (req, res) => {
+    try {
+        const addresses = await Address.find();
+        res.json(addresses);
+    } catch (error) {
+        console.error("Error fetching addresses", error);
+        res.status(500).send("Error fetching addresses");
+    }
+});
 
-    app.post('/api/addresses', async (req, res) => {
-        console.log("tryna save ya address!", req.body)
-        try {
-            const address = await saveAddress(req.body);
-            res.status(201).json(address);
-        } catch (error) {
-            console.error("Error saving address:", error);
-            res.status(500).json({ error: 'Oops! Error saving address', details: error.message });
-        }
-    });
-
-    app.get('/api/addresses', async (req, res) => {
-        try {
-            const addresses = await Address.find();
-            res.json(addresses);
-        } catch (error) {
-            console.error("Error fetching addresses", error);
-            res.status(500).send("Error fetching addresses");
-        }
-    });
-
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
-        console.log(`Server started serving at port ${PORT}!`);
-    });
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server started serving at port ${PORT}!`);
+});
