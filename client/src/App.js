@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './App.css';
-import { countries, regionData, countryFormats } from './addressData';
+import { countries, regionData, countryFormats } from './countryData';
 
 function HomePage() {
     const [address, setAddress] = useState({
@@ -96,7 +96,7 @@ function HomePage() {
                         {address.country === "United States" || address.country === "Canada" ? "State/Province" : "Region"}:
                         <select name="region" value={address.region} onChange={handleInputChange} required>
                             <option value="">Select a {address.country === "United States" || address.country === "Canada" ? "State/Province" : "Region"}</option>
-                            {regionData[address.country].map((region, index) => (
+                            {Object.keys(regionData[address.country]).map((region, index) => (
                                 <option key={index} value={region}>{region}</option>
                             ))}
                         </select>

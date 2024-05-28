@@ -5,7 +5,7 @@ mongoose.connect('mongodb://localhost/AddressData', {
     useUnifiedTopology: true
 }).then(() => console.log("MongoDB connected"))
     .catch(err => console.log(err));
-    
+
 const IntAddressSchema = new mongoose.Schema({
     name: { type: String, required: true },
     country: { type: String, required: true },

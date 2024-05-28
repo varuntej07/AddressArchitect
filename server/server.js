@@ -8,7 +8,9 @@ app.use(cors());
 
 app.use(express.json());
 
-const countryFormats = require('./countryFormats');
+const path = require('path');
+const countryFormatPath = path.resolve(__dirname, '../client/src/countryData.js');
+const { countryFormats } = require(countryFormatPath);
 
 
 app.get('/search', async (req, res) => {
