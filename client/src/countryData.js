@@ -301,59 +301,77 @@ const regionData = {
 
 const countryFormats = {
     'Brazil': {
-        'format': '{name}, {addressLine1}, {addressLine2}, {neighbourhood}, {city}, {region}, {postalCode}',
+        'format': '{name}, {addressLine1}, {addressLine2}, {neighborhood}, {city}-{region}, {postalCode}, {country}',
         'labels': {
+            'name': 'Name',
             'addressLine1': 'Street',
             'addressLine2': 'Apt/Suite',
+            'neighborhood': 'Neighborhood',
             'region': 'State',
-            'postalCode': 'CEP'
+            'postalCode': 'Postal code', /*Also "CEP" which just means postal code*/
+            'country': 'Country'
         },
         'postalCodeFormat': '#####-###'
     },
     'Canada': {
-        'format': '{name}, {addressLine1}, {addressLine2}, {city}, {region}, {postalCode}, {country}',
+        'format': '{name}, {addressLine1}, {addressLine2}, {city} {region}, {postalCode}, {country}',
         'labels': {
-            'addressLine1': 'Street Number and Name',
-            'addressLine2': 'Unit Number',
+            'name': 'Name',
+            'addressLine1': 'Street Number',
+            'addressLine2': 'Unit Number (optional)',
             'region': 'Province',
             'postalCode': 'Postal Code',
             'country': 'Country'
         },
-        'postalCodeFormat': 'A#A-#A#'
+        'postalCodeFormat': 'A#A #A#'
     },
     'Germany': {
-        'format': '{name}, {addressLine1}, {addressLine2}, {city}, {region}, {postalCode}',
+        'format': '{salutation}, {name}, {company}, {addressLine1}, {addressLine2}, {postalCode}, {city}, {country}',
         'labels': {
-            'addressLine1': 'Street Address',
+            'salutation': 'Salutation',
+            'name': 'Name',
+            'company': 'Institution / Company Name',
+            'addressLine1': 'Street Address / PO Box',
             'addressLine2': 'Optional Address Line',
             'region': 'State',
-            'postalCode': 'Postal Code'
+            'postalCode': 'Postal Code',
+            'city': 'City',
+            'country': 'Country'
         },
         'postalCodeFormat': '#####'
     },
     'India': {
         'format': '{name}, {addressLine1}, {addressLine2}, {city}, {region}, {postalCode}',
         'labels': {
+            'name': 'Name',
             'addressLine1': 'Street Address',
             'addressLine2': 'Landmark',
+            'locality': 'Locality/Area',
+            city: 'City/district',
             'region': 'State',
-            'postalCode': 'PIN'
+            'postalCode': 'PIN',
+            'country': 'Country'
         },
         'postalCodeFormat': '######'
     },
+   /* Assuming addresses are written in English*/
     'Japan': {
-        'format': '{postalCode}, {region}, {city}, {addressLine1}, {addressLine2}, {name}',
+        'format': '{name}, {addressLine1}, {addressLine2}, {city}, {region}, {postalCode}, {country}',
         'labels': {
+            'name': 'Name',
             'region': 'Prefecture',
             'city': 'City',
-            'addressLine1': 'Neighborhood, Block',
-            'addressLine2': 'Building Name, Apartment Number'
+            'addressLine1': 'Neighborhood/Block',
+            'addressLine2': 'Building Name, Apartment Number',
+            'postalCode': 'Postal Code',
+            'country': 'Country'
         },
         'postalCodeFormat': '###-####'
     },
     'North Korea': {
         'format': '{name}, {addressLine1}, {addressLine2}, {city}, {region}, {postalCode}, {country}',
         'labels': {
+            'name': 'Name',
             'addressLine1': 'Street',
             'addressLine2': 'District',
             'city': 'City',
@@ -364,8 +382,9 @@ const countryFormats = {
         'postalCodeFormat': '#####'
     },
     'South Korea': {
-        'format': '{name}, {addressLine1}, {addressLine2}, {city}, {region}, {postalCode}, {country}',
+        'format': '{name}, {addressLine1}, {addressLine2}, {city}, {postalCode}, {region}, {country}',
         'labels': {
+            'name': 'Name',
             'addressLine1': 'Street',
             'addressLine2': 'District',
             'city': 'City',
@@ -376,10 +395,12 @@ const countryFormats = {
         'postalCodeFormat': '#####'
     },
     'Mexico': {
-        'format': '{name}, {addressLine1}, {addressLine2}, {neighbourhood}, {city}, {region}, {postalCode}, {country}',
+        'format': '{name}, {addressLine1}, {addressLine2}, {neighbourhood},{postalCode}, {city}, {region}, {country}',
         'labels': {
+            'name': 'Name',
             'addressLine1': 'Street',
-            'addressLine2': 'Neighborhood',
+            'addressLine2': 'Building/Floor/Apartment',
+            'neighbourhood': 'Neighborhood',
             'city': 'City',
             'region': 'State',
             'postalCode': 'Postal Code',
@@ -388,10 +409,11 @@ const countryFormats = {
         'postalCodeFormat': '#####'
     },
     'Spain': {
-        'format': '{name}, {addressLine1}, {addressLine2}, {city}, {region}, {postalCode}, {country}',
+        'format': '{name}, {addressLine1}, {addressLine2}, {postalCode}, {city}, {region}, {country}',
         'labels': {
+            'name': 'Name',
             'addressLine1': 'Street',
-            'addressLine2': 'Neighborhood',
+            'addressLine2': 'Floor/ Apartment',
             'city': 'City',
             'region': 'Region',
             'postalCode': 'Postal Code',
@@ -400,10 +422,13 @@ const countryFormats = {
         'postalCodeFormat': '#####'
     },
     'UK': {
-        'format': '{name}, {addressLine1}, {addressLine2}, {city}, {region}, {postalCode}, {country}',
+        'format': '{name},{company} {addressLine1}, {addressLine2},{locality}, {city}, {region}, {postalCode}, {country}',
         'labels': {
+            'name': 'Name',
+            'company': 'Company',
             'addressLine1': 'Street',
-            'addressLine2': 'County',
+            'addressLine2': 'Building name',
+            'locality': 'Locality',
             'city': 'City',
             'region': 'Region',
             'postalCode': 'Postal Code',
@@ -412,10 +437,13 @@ const countryFormats = {
         'postalCodeFormat': 'A# #AA'
     },
     'USA': {
-        'format': '{name}, {addressLine1}, {addressLine2}, {city}, {region}, {postalCode}',
+        'format': '{name}, {company}, {addressLine1}, {addressLine2}, {city}, {region}, {postalCode}, {country}',
         'labels': {
+            'name': 'Name',
+            'company': 'Company',
             'addressLine1': 'Street',
             'addressLine2': 'Apt/Suite',
+            'city': 'City',
             'region': 'State',
             'postalCode': 'ZIP Code'
         },

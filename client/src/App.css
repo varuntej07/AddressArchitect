@@ -1,9 +1,8 @@
 .App {
     display: flex;
     justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #f0f0f0;
+    align-items: flex-start;
+    position: relative;
     font-family: sans-serif;
 }
 
@@ -26,6 +25,7 @@
     .address-form label {
         margin-bottom: 10px;
         font-weight: bold;
+        font-size: 12px;
         color: #333;
     }
 
@@ -36,6 +36,7 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         width: 100%;
+        font-size: 10px;
         box-sizing: border-box;
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
@@ -78,3 +79,22 @@
             box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
             outline: none;
         }
+
+.search-container {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    margin-right: auto;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.dropdown-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.dropdown1, .dropdown2 {
+    flex: 1;
+    width: 100px;
+}
