@@ -39,7 +39,8 @@ function AddressForm({ address, errors, handleInputChange, handleSubmit }) {
     const { labels = {} } = countryFormats[address.country] || {};
 
     return (
-        <form onSubmit={handleSubmit} className="address-form">
+        <div className = "address-form">
+        <form onSubmit={handleSubmit}>
             {labels.salutation && (
                 <label>
                     {labels.salutation}: <input type="text" name="salutation" placeholder="Mr/Ms"
@@ -52,7 +53,7 @@ function AddressForm({ address, errors, handleInputChange, handleSubmit }) {
             </label>
             {labels.company && (
                 <label>
-                    {labels.company}: <input type="text" name="company" placeholder="Company (optional)"
+                    {labels.company}: <input type="text" name="company"
                         value={address.company} onChange={handleInputChange} />
                 </label>
             )}
@@ -65,7 +66,7 @@ function AddressForm({ address, errors, handleInputChange, handleSubmit }) {
                 </select>
             </label>
             <label>
-                {labels.addressLine1 || 'Address Line 1'}: <input type="text" name="addressLine1" placeholder="Street"
+                {labels.addressLine1 || 'Address'}: <input type="text" name="addressLine1"
                     value={address.addressLine1} onChange={handleInputChange} required />
             </label>
             {labels.addressLine2 && (
@@ -129,7 +130,8 @@ function AddressForm({ address, errors, handleInputChange, handleSubmit }) {
                 {errors.postalCode && <span className="error">{errors.postalCode}</span>}
             </label>
             <button type="submit">Submit</button>
-        </form>
+            </form>
+        </div>
     );
 }
 

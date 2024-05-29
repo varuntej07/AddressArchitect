@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import Autosuggest from 'react-autosuggest';
 import { countries } from './countryData';
@@ -9,22 +9,56 @@ function GlobalSearch() {
     const [suggestions, setSuggestions] = useState([]);
     const [selectedCountry1, setSelectedCountry1] = useState('');
     const [selectedCountry2, setSelectedCountry2] = useState('');
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
 
-    const handleSearchChange = (e, { newValue }) => {
-        setQuery(newValue);
-    };
-
-    const handleSuggestionsFetchRequested = async ({ value }) => {
-        if (value.length > 2 && selectedCountry1 && selectedCountry2) {
+    const fetchSuggestions = useCallback(async (value, page) => {
+        if (value.length > 2 && (selectedCountry1 || selectedCountry2)) {
             try {
-                const response = await axios.get(`http://localhost:5000/search?q=${encodeURIComponent(value)}&country1=${encodeURIComponent(selectedCountry1)}&country2=${encodeURIComponent(selectedCountry2)}`);
-                setSuggestions(response.data.slice(0, 5));
+                console.log('Fetching data with:', {
+                    q: value,
+                    country1: selectedCountry1,
+                    country2: selectedCountry2,
+                    page,
+                    limit: 25
+                });
+                const response = await axios.get(`http://localhost:5000/search`, {
+                    params: {
+                        q: value,
+                        country1: selectedCountry1,
+                        country2: selectedCountry2,
+                        page,
+                        limit: 25
+                    }
+                });
+                console.log('Fetched data:', response.data);
+                setSuggestions(response.data.results || []);
+                setTotalPages(response.data.totalPages || 1);
             } catch (error) {
                 console.error('Error fetching data:', error);
+                setSuggestions([]);
+                setTotalPages(1);
             }
         } else {
             setSuggestions([]);
+            setTotalPages(1);
         }
+    }, [selectedCountry1, selectedCountry2]);
+
+    useEffect(() => {
+        if (query.length > 2 && (selectedCountry1 || selectedCountry2)) {
+            fetchSuggestions(query, page);
+        }
+    }, [query, page, selectedCountry1, selectedCountry2, fetchSuggestions]);
+
+    const handleSearchChange = (e, { newValue }) => {
+        setQuery(newValue);
+        setPage(1); // Reseting to the first page whenever a new search is initiated
+    };
+
+    const handleSuggestionsFetchRequested = async ({ value }) => {
+        setPage(1); // Reseting to the first page whenever suggestions are fetched
+        await fetchSuggestions(value, 1);
     };
 
     const handleSuggestionsClearRequested = () => {
@@ -42,6 +76,15 @@ function GlobalSearch() {
         value: query,
         onChange: handleSearchChange
     };
+
+    const handlePageChange = (newPage) => {
+        console.log('Changing to page:', newPage);
+        setPage(newPage);
+    };
+
+    useEffect(() => {
+        console.log('Suggestions updated:', suggestions);
+    }, [suggestions]);
 
     return (
         <div className="search-container">
@@ -71,6 +114,7 @@ function GlobalSearch() {
                 </select>
             </div>
             <Autosuggest
+                key={`${page}-${suggestions.length}`}
                 suggestions={suggestions}
                 onSuggestionsFetchRequested={handleSuggestionsFetchRequested}
                 onSuggestionsClearRequested={handleSuggestionsClearRequested}
@@ -78,6 +122,15 @@ function GlobalSearch() {
                 renderSuggestion={renderSuggestion}
                 inputProps={inputProps}
             />
+            {totalPages > 1 && (
+                <div className="pagination">
+                    {Array.from({ length: totalPages }, (_, index) => (
+                        <button key={index} onClick={() => handlePageChange(index + 1)} disabled={page === index + 1}>
+                            {index + 1}
+                        </button>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

@@ -17,11 +17,19 @@ app.get('/search', async (req, res) => {
     const regex = new RegExp(query, 'i');
     const country1 = req.query.country1 || '';
     const country2 = req.query.country2 || '';
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 25;
+    const skip = (page - 1) * limit;
 
     console.log(`Searching for: ${query} in ${country1} and ${country2}`);
-    const results = await Address.find({
+
+    const countryConditions = [];
+    if (country1) countryConditions.push({ country: country1 });
+    if (country2) countryConditions.push({ country: country2 });
+
+    const searchConditions = {
         $and: [
-            { $or: [{ country: country1 }, { country: country2 }] },
+            { $or: countryConditions },
             {
                 $or: [
                     { salutation: regex },
@@ -33,12 +41,15 @@ app.get('/search', async (req, res) => {
                     { locality: regex },
                     { city: regex },
                     { region: regex },
-                    { postalCode: regex },
-                    { country: regex }
+                    { postalCode: regex }
                 ]
             }
         ]
-    }).lean().limit(50); // Limiting to first 50 results
+    };
+
+    const results = await Address.find(searchConditions).lean().skip(skip).limit(limit);
+
+    const totalResults = await Address.countDocuments(searchConditions);
 
     const formattedResults = results.map(address => {
         const countryFormat = countryFormats[address.country];
@@ -61,7 +72,6 @@ app.get('/search', async (req, res) => {
             formattedAddress = `${address.salutation || ''} ${address.name || ''} ${address.company || ''} ${address.addressLine1 || ''} ${address.addressLine2 || ''} ${address.neighborhood || ''} ${address.locality || ''} ${address.city || ''} ${address.region || ''} ${address.postalCode || ''} ${address.country || ''}`;
         }
 
-        // Removing commas from the formatted address in the suggestions
         formattedAddress = formattedAddress.replace(/,/g, ' ');
 
         return {
@@ -70,11 +80,16 @@ app.get('/search', async (req, res) => {
         };
     });
 
-    res.json(formattedResults);
+    res.json({
+        results: formattedResults,
+        totalResults,
+        totalPages: Math.ceil(totalResults / limit),
+        currentPage: page
+    });
 });
 
 app.post('/api/addresses', async (req, res) => {
-    console.log("tryna save ya address!", req.body)
+    console.log("Trying to save address:", req.body)
     try {
         const address = await saveAddress(req.body);
         res.status(201).json(address);

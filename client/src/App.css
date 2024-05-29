@@ -1,18 +1,16 @@
 .App {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    position: relative;
-    font-family: sans-serif;
+    padding: 20px;
 }
 
 .address-form {
+    display: inline-block;
     background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 320px;
-    display: flex;
     flex-direction: column;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -36,7 +34,7 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         width: 100%;
-        font-size: 10px;
+        font-size: 14px;
         box-sizing: border-box;
         transition: border-color 0.3s ease, box-shadow 0.3s ease;
     }
@@ -64,37 +62,50 @@
             background-color: #0056b3;
             transform: translateY(-2px);
         }
+.search-container {
+    float : right;
+    display: inline-block;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 320px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
 
-    .address-form input[type="search"] {
-        margin-bottom: 15px;
-        padding: 10px;
-        border: 2px solid #007bff;
-        border-radius: 5px;
-        width: 100%;
-        box-sizing: border-box;
+    .search-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
 
-        .address-form input[type="search"]:focus {
-            border-color: #0056b3;
-            box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
-            outline: none;
-        }
-
-.search-container {
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    margin-right: auto;
-    padding-bottom: 10px;
-    padding-top: 10px;
-}
 .dropdown-container {
-    display: flex;
+   display: flex;
     justify-content: space-between;
     gap: 10px;
+    margin-bottom: 10px;
 }
 
 .dropdown1, .dropdown2 {
     flex: 1;
     width: 100px;
 }
+.pagination {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+    .pagination button {
+        padding: 6px 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        cursor: pointer;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+        .pagination button:hover {
+            background-color: #007bff;
+            border-color: #007bff;
+            color: #fff;
+        }

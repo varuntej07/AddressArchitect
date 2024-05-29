@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const faker = require('faker');
 const path = require('path');
-const { Address } = require('./mongooseModel');
+const { Address, clearAddresses } = require('./mongooseModel');
 
 const countryDataPath = path.resolve(__dirname, '../client/src/countryData.js');
 const { regionData, countryFormats } = require(countryDataPath);
@@ -46,18 +46,21 @@ const addressGenerator = (country, count) => {
 const seedData = async () => {
     console.log('Starting the seeding process...');
 
+    /*console.log("Clearing existing addresses...");
+    await clearAddresses();
+*/
     try {
         const allAddresses = [];
         for (const country in regionData) {
             console.log(`Generating addresses for ${country}...`);
-            const addresses = addressGenerator(country, 3);
+            const addresses = addressGenerator(country, 1000);
             allAddresses.push(...addresses);
            /* console.log(`${addresses.length} addresses generated for ${country}`);*/
         }
 
        /* console.log(`Inserting ${allAddresses.length} addresses into the database...`);*/
         await Address.insertMany(allAddresses);
-        console.log('Data successfully seeded!', allAddresses);
+        console.log('Data successfully seeded!');
     } catch (err) {
         console.error('Error seeding the data', err);
     } finally {
