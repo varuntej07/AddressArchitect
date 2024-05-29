@@ -12,25 +12,33 @@ const path = require('path');
 const countryFormatPath = path.resolve(__dirname, '../client/src/countryData.js');
 const { countryFormats } = require(countryFormatPath);
 
-
 app.get('/search', async (req, res) => {
     const query = req.query.q;
     const regex = new RegExp(query, 'i');
+    const country1 = req.query.country1 || '';
+    const country2 = req.query.country2 || '';
+
+    console.log(`Searching for: ${query} in ${country1} and ${country2}`);
     const results = await Address.find({
-        $or: [
-            { salutation: regex },
-            { company: regex },
-            { name: regex },
-            { addressLine1: regex },
-            { addressLine2: regex },
-            { neighborhood: regex },
-            { locality: regex },
-            { city: regex },
-            { region: regex },
-            { postalCode: regex },
-            { country: regex }
+        $and: [
+            { $or: [{ country: country1 }, { country: country2 }] },
+            {
+                $or: [
+                    { salutation: regex },
+                    { company: regex },
+                    { name: regex },
+                    { addressLine1: regex },
+                    { addressLine2: regex },
+                    { neighborhood: regex },
+                    { locality: regex },
+                    { city: regex },
+                    { region: regex },
+                    { postalCode: regex },
+                    { country: regex }
+                ]
+            }
         ]
-    }).lean();
+    }).lean().limit(50); // Limiting to first 50 results
 
     const formattedResults = results.map(address => {
         const countryFormat = countryFormats[address.country];
@@ -43,13 +51,14 @@ app.get('/search', async (req, res) => {
                 .replace("{company}", address.company || "")
                 .replace("{addressLine1}", address.addressLine1 || "")
                 .replace("{addressLine2}", address.addressLine2 || "")
+                .replace("{neighborhood}", address.neighborhood || "")
                 .replace("{locality}", address.locality || "")
                 .replace("{city}", address.city || "")
                 .replace("{region}", address.region || "")
                 .replace("{postalCode}", address.postalCode || "")
                 .replace("{country}", address.country || "");
         } else {
-            formattedAddress = `${address.salutation || ''} ${address.name || ''}, ${address.company || ''} ${address.addressLine1 || ''} ${address.addressLine2 || ''} ${address.locality || ''} ${address.city || ''} ${address.region || ''} ${address.postalCode || ''} ${address.country || ''}`;
+            formattedAddress = `${address.salutation || ''} ${address.name || ''} ${address.company || ''} ${address.addressLine1 || ''} ${address.addressLine2 || ''} ${address.neighborhood || ''} ${address.locality || ''} ${address.city || ''} ${address.region || ''} ${address.postalCode || ''} ${address.country || ''}`;
         }
 
         // Removing commas from the formatted address in the suggestions
@@ -63,9 +72,7 @@ app.get('/search', async (req, res) => {
 
     res.json(formattedResults);
 });
-app.get('/api', (req, res) => {
-    res.json({ 'address': ['address1', 'address2', 'address3..'] });
-});
+
 app.post('/api/addresses', async (req, res) => {
     console.log("tryna save ya address!", req.body)
     try {
