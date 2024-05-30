@@ -5,7 +5,7 @@ import GlobalSearch from './GlobalSearch';
 import { countryFormats } from './countryData';
 
 function HomePage() {
-    const [address, setAddress] = useState({
+    const initialAddressState = {
         salutation: '',
         company: '',
         name: '',
@@ -17,8 +17,9 @@ function HomePage() {
         city: '',
         region: '',
         postalCode: '',
-    });
+    };
 
+    const [address, setAddress] = useState(initialAddressState);
     const [errors, setErrors] = useState({});
 
     const handleInputChange = (e) => {
@@ -34,7 +35,7 @@ function HomePage() {
         const errors = {};
         const format = countryFormats[country];
 
-        if (format) {
+        if (format && country !== 'United Kingdom') {
             const postalCodePattern = new RegExp(`^${format.postalCodeFormat.replace(/#/g, '\\d').replace(/A/g, '[A-Za-z]')}$`);
             if (!postalCodePattern.test(postalCode)) {
                 errors.postalCode = `Invalid Postal code: ${format.postalCodeFormat}`;
@@ -56,6 +57,8 @@ function HomePage() {
         axios.post('http://localhost:5000/api/addresses', address)
             .then(response => {
                 console.log('Address saved:', response.data);
+                setAddress(initialAddressState);  // Reset address form after successful submission
+                setErrors({});
             }).catch(error => {
                 console.error('Error saving address:', error);
             });

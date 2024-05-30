@@ -49,26 +49,32 @@
     .address-form button {
         margin-top: 20px;
         padding: 12px;
-        background-color: #007bff;
-        color: #ffffff;
+        background-color: #6dd61e;
+        color: ghostwhite;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         font-weight: bold;
+        width: 100%;
         transition: background-color 0.3s ease, transform 0.3s ease;
     }
 
         .address-form button:hover {
-            background-color: #0056b3;
+            background-color: greenyellow;
             transform: translateY(-2px);
         }
+.error{
+    color: orangered;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+}
 .search-container {
     float : right;
     display: inline-block;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 320px;
+    width: 350px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -76,6 +82,11 @@
         transform: translateY(-5px);
         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
+
+.search-input{
+    width: 100%;
+    padding-top: 6px;
+}
 
 .dropdown-container {
    display: flex;
@@ -88,24 +99,38 @@
     flex: 1;
     width: 100px;
 }
+.search-suggestions {
+    padding: 5px;
+    background-color: #fff;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+    .search-suggestions li:hover {
+        background-color: #f0f0f0;
+    }
+
 .pagination {
-    margin-top: 20px;
     display: flex;
     justify-content: center;
-    gap: 10px;
+    margin-top: 20px;
 }
 
     .pagination button {
-        padding: 6px 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        background-color: #f9f9f9;
+        margin: 0 5px;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 2px;
+        background-color: #6dd61e;
+        color: ghostwhite;
         cursor: pointer;
-        transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
+        .pagination button.active {
+            color: black;
+        }
+
         .pagination button:hover {
-            background-color: #007bff;
-            border-color: #007bff;
-            color: #fff;
+            background-color: greenyellow;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }

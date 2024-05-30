@@ -302,7 +302,7 @@ const regionData = {
 
 const countryFormats = {
     'Brazil': {
-        'format': '{name},{company} {addressLine1}, {neighborhood}, {city}-{region}, {postalCode}, {country}',
+        'format': '{name} {company} {addressLine1} {neighborhood} {city} {region} {postalCode} {country}',
         'labels': {
             'name': 'Name',
             'company': 'Company (optional)',
@@ -316,7 +316,7 @@ const countryFormats = {
         'postalCodeFormat': '#####-###'
     },
     'Canada': {
-        'format': '{name},{company} {addressLine1} {addressLine2} {city} {region} {postalCode} {country}',
+        'format': '{name} {company} {addressLine1} {addressLine2} {city} {region} {postalCode} {country}',
         'labels': {
             'name': 'Name',
             'company': 'Company (optional)',
@@ -330,7 +330,7 @@ const countryFormats = {
         'postalCodeFormat': 'A#A #A#'
     },
     'Germany': {
-        'format': '{salutation} {name}, {company}, {addressLine1} {postalCode} {city} {country}',
+        'format': '{salutation} {name} {company} {addressLine1} {postalCode} {city} {country}',
         'labels': {
             'salutation': 'Salutation',
             'name': 'Name',
@@ -344,7 +344,7 @@ const countryFormats = {
         'postalCodeFormat': '#####'
     },
     'India': {
-        'format': '{salutation} {name} {company}, {addressLine1}, {locality}, {city}, {region}, {postalCode} {country}',
+        'format': '{salutation} {name} {company} {addressLine1} {locality} {city} {region} {postalCode} {country}',
         'labels': {
             'salutation': 'Salutation',
             'company': 'Company (optional)',
@@ -360,7 +360,7 @@ const countryFormats = {
     },
    /* Assuming addresses are written in English*/
     'Japan': {
-        'format': '{salutation} {company} {name}, {addressLine1}, {addressLine2}, {city}, {region}, {postalCode}, {country}',
+        'format': '{salutation} {company} {name} {addressLine1} {addressLine2} {city} {region} {postalCode} {country}',
         'labels': {
             'salutation': 'Salutation',
             'company': 'Company (optional)',
@@ -375,8 +375,9 @@ const countryFormats = {
         'postalCodeFormat': '###-####'
     },
     'North Korea': {
-        'format': '{name}, {addressLine1}, {addressLine2}, {city}, {region}, {postalCode}, {country}',
+        'format': '{salutation} {name} {addressLine1} {addressLine2} {city} {region} {postalCode} {country}',
         'labels': {
+            'salutation': 'Salutation',
             'name': 'Name',
             'addressLine1': 'Address',
             'addressLine2': 'Locality (optional)',
@@ -388,8 +389,9 @@ const countryFormats = {
         'postalCodeFormat': '#####'
     },
     'South Korea': {
-        'format': '{name}, {addressLine1}, {locality}, {city}, {region}, {postalCode} {country}',
+        'format': '{salutation} {name} {addressLine1} {locality} {city} {region} {postalCode} {country}',
         'labels': {
+            'salutation': 'Salutation',
             'name': 'Name',
             'addressLine1': 'Address',
             'locality': 'Landmark (optional)',
@@ -401,8 +403,9 @@ const countryFormats = {
         'postalCodeFormat': '#####'
     },
     'Mexico': {
-        'format': '{name}, {addressLine1}, {neighborhood},{postalCode}, {city}, {region}, {country}',
+        'format': '{salutation} {name} {addressLine1} {neighborhood} {postalCode} {city} {region} {country}',
         'labels': {
+            'salutation': 'Salutation',
             'name': 'Name',
             'addressLine1': 'Address',
             'neighborhood': 'Neighborhood',
@@ -414,8 +417,9 @@ const countryFormats = {
         'postalCodeFormat': '#####'
     },
     'Spain': {
-        'format': '{name},{company} {addressLine1}, {addressLine2}, {postalCode}, {city}, {region}, {country}',
+        'format': '{salutation} {name} {company} {addressLine1} {addressLine2} {postalCode} {city} {region} {country}',
         'labels': {
+            'salutation': 'Salutation',
             'name': 'Name',
             'company': 'Company (optional)',
             'addressLine1': 'Address',
@@ -428,7 +432,7 @@ const countryFormats = {
         'postalCodeFormat': '#####'
     },
     'United Kingdom': {
-        'format': '{name},{company} {addressLine1}, {city} {region}, {postalCode}, {country}',
+        'format': '{name} {company} {addressLine1} {city} {region} {postalCode} {country}',
         'labels': {
             'name': 'Name',
             'company': 'Company (Optional)',
@@ -441,8 +445,9 @@ const countryFormats = {
         'postalCodeFormat': 'AA#A #AA'
     },
     'United States': {
-        'format': '{name}, {company}, {addressLine2}, {addressLine1}, {city}, {region}, {postalCode}, {country}',
+        'format': '{salutation} {name} {company} {addressLine2} {addressLine1} {city} {region} {postalCode} {country}',
         'labels': {
+            'salutation': 'Salutation',
             'name': 'Name',
             'company': 'Company',
             'addressLine1': 'Street/Ave',

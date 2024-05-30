@@ -18,7 +18,7 @@ const IntAddressSchema = new mongoose.Schema({
     company: { type: String },
     locality: { type: String },
     neighborhood: { type: String },
-});
+}, { timestamps: true });
 
 const Address = mongoose.model('Address', IntAddressSchema);
 
