@@ -20,6 +20,12 @@ const IntAddressSchema = new mongoose.Schema({
     neighborhood: { type: String },
 }, { timestamps: true });
 
+IntAddressSchema.index({ name: 1 });
+IntAddressSchema.index({ addressLine1: 1 });
+IntAddressSchema.index({ city: 1 });
+IntAddressSchema.index({ region: 1 });
+IntAddressSchema.index({ postalCode: 1 });
+
 const Address = mongoose.model('Address', IntAddressSchema);
 
 const saveAddress = async (addressData) => {

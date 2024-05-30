@@ -9,6 +9,8 @@
     "react-autocomplete": "^1.8.1",
     "react-autosuggest": "^10.1.0",
     "react-paginate": "^8.2.0",
-    "react-select": "^5.8.0"
+    "react-select": "^5.8.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0"
   }
 }

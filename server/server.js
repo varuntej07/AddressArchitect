@@ -4,11 +4,39 @@ const bodyParser = require('body-parser');
 const { Address, saveAddress } = require('./mongooseModel');
 const cors = require('cors');
 const path = require('path');
+
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+
 const countryFormatPath = path.resolve(__dirname, '../client/src/countryData.js');
 const { countryFormats } = require(countryFormatPath);
 
 app.use(cors());
 app.use(express.json());
+
+// Swagger setup
+const swaggerOptions = {
+    swaggerDefinition: {
+        openapi: '3.0.0',
+        info: {
+            title: 'Address API',
+            version: '1.0.0',
+            description: 'API for managing International country specific addresses'
+        },
+        servers: [
+            {
+                url: 'http://localhost:5000',
+                description: 'Local server'
+            }
+        ]
+    },
+    apis: [path.resolve(__dirname, './openapi.yaml')], // Path to the API docs
+};
+
+console.log('Swagger Path:', path.resolve(__dirname, './openapi.yaml'));
+
+const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.get('/search', async (req, res) => {
     const query = req.query.q;
@@ -24,23 +52,18 @@ app.get('/search', async (req, res) => {
 
         queryConditions.push({
             $or: [
-                { salutation: { $regex: new RegExp(query, 'i') } },
                 { company: { $regex: new RegExp(query, 'i') } },
-                { name: { $regex: new RegExp(`^${query}$`, 'i') } },  //exactly matching the name
+                { name: { $regex: new RegExp(query, 'i') } },
                 { addressLine1: { $regex: new RegExp(query, 'i') } },
-                { addressLine2: { $regex: new RegExp(query, 'i') } },
-                { neighborhood: { $regex: new RegExp(query, 'i') } },
-                { locality: { $regex: new RegExp(query, 'i') } },
                 { city: { $regex: new RegExp(query, 'i') } },
                 { region: { $regex: new RegExp(query, 'i') } },
                 { postalCode: { $regex: new RegExp(query, 'i') } },
-                { country: { $regex: new RegExp(query, 'i') } }
             ]
         });
 
         if (country1 && country2) {
             queryConditions.push({
-                $or: [{ country: country1 }, { country: country2 }]
+                country: { $in: [country1, country2] }
             });
         } else if (country1 || country2) {
             queryConditions.push({
@@ -79,7 +102,7 @@ app.get('/search', async (req, res) => {
                 formattedAddress = `${address.salutation || ''} ${address.name || ''} ${address.company || ''} ${address.addressLine1 || ''} ${address.addressLine2 || ''} ${address.neighborhood || ''} ${address.locality || ''} ${address.city || ''} ${address.region || ''} ${address.postalCode || ''} ${address.country || ''}`;
             }
 
-            formattedAddress = formattedAddress.replace(/,/g, ' '); //removing commas 
+            formattedAddress = formattedAddress.replace(/,/g, ' '); // removing commas 
 
             return {
                 ...address,

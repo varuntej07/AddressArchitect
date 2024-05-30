@@ -1,20 +1,39 @@
 const mongoose = require('mongoose');
 const faker = require('faker');
 const path = require('path');
-const { Address, clearAddresses } = require('./mongooseModel');
+const { Address } = require('./mongooseModel');
 
 const countryDataPath = path.resolve(__dirname, '../client/src/countryData.js');
 const { regionData, countryFormats } = require(countryDataPath);
+
+const countryPopulations = {
+    'Brazil': 212559417,
+    'Canada': 37742154,
+    'Germany': 83783942,
+    'India': 1380004385,
+    'Japan': 126476461,
+    'North Korea': 25778816,
+    'South Korea': 51269185,
+    'Mexico': 128932753,
+    'Spain': 46754778,
+    'United Kingdom': 67886011,
+    'United States': 331002651
+};
+
+const totalPopulation = Object.values(countryPopulations).reduce((sum, population) => sum + population, 0);
+
+const addressCountPerCountry = {};
+const totalAddresses = 100000; // total generating these many addresses
+
+for (const country in countryPopulations) {
+    const population = countryPopulations[country];
+    addressCountPerCountry[country] = Math.round((population / totalPopulation) * totalAddresses);
+}
 
 const addressGenerator = (country, count) => {
     const addresses = [];
     const data = regionData[country];
     const format = countryFormats[country]?.postalCodeFormat;
-
-    /*if (!data) {
-        console.error(`No region data found for ${country}`);
-        return addresses;
-    }*/
 
     const regions = Object.keys(data);
 
@@ -46,19 +65,16 @@ const addressGenerator = (country, count) => {
 const seedData = async () => {
     console.log('Starting the seeding process...');
 
-    /*console.log("Clearing existing addresses...");
-    await clearAddresses();
-*/
     try {
         const allAddresses = [];
         for (const country in regionData) {
-            console.log(`Generating addresses for ${country}...`);
-            const addresses = addressGenerator(country, 1000);
+            const addressCount = addressCountPerCountry[country];
+            console.log(`Generating ${addressCount} addresses for ${country}...`);
+            const addresses = addressGenerator(country, addressCount);
             allAddresses.push(...addresses);
-           /* console.log(`${addresses.length} addresses generated for ${country}`);*/
         }
 
-       /* console.log(`Inserting ${allAddresses.length} addresses into the database...`);*/
+        console.log(`Inserting ${allAddresses.length} addresses into the database...`);
         await Address.insertMany(allAddresses);
         console.log('Data successfully seeded!');
     } catch (err) {

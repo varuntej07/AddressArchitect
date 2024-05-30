@@ -13,9 +13,16 @@ function GlobalSearch() {
 
     useEffect(() => {
         const fetchResults = async () => {
-            if (query.length > 2 && (selectedCountry1 || selectedCountry2)) {
+            if (query.length > 3 && (selectedCountry1 || selectedCountry2)) {
                 try {
-                    const response = await axios.get(`http://localhost:5000/search?q=${encodeURIComponent(query)}&country1=${encodeURIComponent(selectedCountry1)}&country2=${encodeURIComponent(selectedCountry2)}&page=${page}`);
+                    const response = await axios.get(`http://localhost:5000/search`, {
+                        params: {
+                            q: query,
+                            country1: selectedCountry1,
+                            country2: selectedCountry2,
+                            page: page
+                        }
+                    });
                     setResults(response.data.results);
                     setTotalPages(response.data.totalPages);
                 } catch (error) {

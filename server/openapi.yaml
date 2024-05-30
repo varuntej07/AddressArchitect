@@ -1,0 +1,137 @@
+openapi: 3.0.0
+info:
+  title: Address API
+  description: API for managing addresses
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: Local server
+
+paths:
+  /search:
+    get:
+      summary: Search addresses
+      description: Users can search the addresses from the database by filtering by selecting a single country or multiple countries from the dropdowns for searching.
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Search query
+        - name: country1
+          in: query
+          schema:
+            type: string
+          description: First country to filter by
+        - name: country2
+          in: query
+          schema:
+            type: string
+          description: Second country to filter by
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+      responses:
+        '200':
+          description: A list of the first 25 search results, with the rest of the results accessible via pagination.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Address'
+                  totalPages:
+                    type: integer
+                  totalResults:
+                    type: integer
+        '500':
+          description: Server error
+
+  /api/addresses:
+    get:
+      summary: Get all addresses
+      description: Retrieve the list of all addresses.
+      responses:
+        '200':
+          description: A list of addresses.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Address'
+        '500':
+          description: Server error
+
+    post:
+      summary: Create a new address
+      description: Add a new address to the database. Users can select a country and save their country-specific address.
+      requestBody:
+        description: Address object containing all required details for the address.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+      responses:
+        '201':
+          description: Address created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Address'
+        '500':
+          description: Server error
+
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        salutation:
+          type: string
+          example: Mr.
+        name:
+          type: string
+          example: Sundar Pichai
+        company:
+          type: string
+          example: Google
+        addressLine1:
+          type: string
+          example: 1600 Amphitheatre Parkway
+        addressLine2:
+          type: string
+          example: Suite 100
+        neighborhood:
+          type: string
+          example: Mountain View
+        locality:
+          type: string
+          example: Santa Clara County
+        city:
+          type: string
+          example: Mountain View
+        region:
+          type: string
+          example: California
+        postalCode:
+          type: string
+          example: 94043
+        country:
+          type: string
+          example: United States
+      required:
+        - name
+        - addressLine1
+        - city
+        - region
+        - postalCode
+        - country
