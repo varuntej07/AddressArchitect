@@ -53,7 +53,7 @@ app.get('/search', async (req, res) => {
         queryConditions.push({
             $or: [
                 { company: { $regex: new RegExp(query, 'i') } },
-                { name: { $regex: new RegExp(query, 'i') } },
+                { name: { $regex: new RegExp(`^${query}$`, 'i') } },  //exactly matching the name
                 { addressLine1: { $regex: new RegExp(query, 'i') } },
                 { city: { $regex: new RegExp(query, 'i') } },
                 { region: { $regex: new RegExp(query, 'i') } },

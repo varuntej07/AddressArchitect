@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { countries } from './countryData';
+import { countryFormats } from './countryData';
 import './App.css';
 
 function GlobalSearch() {
@@ -88,7 +88,7 @@ function GlobalSearch() {
                     className="dropdown1"
                 >
                     <option value="" disabled>Select Country</option>
-                    {countries.map((country, index) => (
+                    {Object.keys(countryFormats).map((country, index) => (
                         <option key={index} value={country}>{country}</option>
                     ))}
                 </select>
@@ -100,7 +100,7 @@ function GlobalSearch() {
                     className="dropdown2"
                 >
                     <option value="" disabled>Select another</option>
-                    {countries.map((country, index) => (
+                    {Object.keys(countryFormats).map((country, index) => (
                         <option key={index} value={country}>{country}</option>
                     ))}
                 </select>
