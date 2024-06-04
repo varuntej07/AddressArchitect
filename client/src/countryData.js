@@ -316,12 +316,11 @@ const countryFormats = {
         'postalCodeFormat': '#####-###'
     },
     'Canada': {
-        'format': '{name} {company} {addressLine1} {addressLine2} {city} {region} {postalCode} {country}',
+        'format': '{name} {company} {addressLine1} {city} {region} {postalCode} {country}',
         'labels': {
             'name': 'Name',
             'company': 'Company (optional)',
-            'addressLine1': 'Unit Number (optional)',
-            'addressLine2': 'Street',
+            'addressLine1': 'Street',
             'city': 'City',
             'region': 'Province',
             'postalCode': 'Postal Code',

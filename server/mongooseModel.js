@@ -34,9 +34,5 @@ const saveAddress = async (addressData) => {
     return address;
 };
 
-const clearAddresses = async () => {
-    await Address.deleteMany({});
-    console.log("All addresses cleared");
-};
 
-module.exports = { Address, saveAddress, clearAddresses };
+module.exports = { Address, saveAddress};

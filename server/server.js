@@ -11,6 +11,8 @@ const swaggerJsdoc = require('swagger-jsdoc');
 const countryFormatPath = path.resolve(__dirname, '../client/src/countryData.js');
 const { countryFormats } = require(countryFormatPath);
 
+const cacheMiddleware = require('./cacheMiddleware');
+
 app.use(cors());
 app.use(express.json());
 
@@ -33,12 +35,10 @@ const swaggerOptions = {
     apis: [path.resolve(__dirname, './openapi.yaml')], // Path to the API docs
 };
 
-console.log('Swagger Path:', path.resolve(__dirname, './openapi.yaml'));
-
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.get('/search', async (req, res) => {
+app.get('/search', cacheMiddleware, async (req, res) => {
     const query = req.query.q;
     const page = parseInt(req.query.page, 10) || 1;
     const limit = 25;
@@ -50,16 +50,18 @@ app.get('/search', async (req, res) => {
     try {
         const queryConditions = [];
 
-        queryConditions.push({
-            $or: [
-                { company: { $regex: new RegExp(query, 'i') } },
-                { name: { $regex: new RegExp(`^${query}$`, 'i') } },  //exactly matching the name
-                { addressLine1: { $regex: new RegExp(query, 'i') } },
-                { city: { $regex: new RegExp(query, 'i') } },
-                { region: { $regex: new RegExp(query, 'i') } },
-                { postalCode: { $regex: new RegExp(query, 'i') } },
-            ]
-        });
+        if (query) {
+            queryConditions.push({
+                $or: [
+                    { company: { $regex: new RegExp(query, 'i') } },
+                    { name: { $regex: new RegExp(`^${query}$`, 'i') } },  //exactly matching the name
+                    { addressLine1: { $regex: new RegExp(query, 'i') } },
+                    { city: { $regex: new RegExp(query, 'i') } },
+                    { region: { $regex: new RegExp(query, 'i') } },
+                    { postalCode: { $regex: new RegExp(query, 'i') } },
+                ]
+            });
+        }
 
         if (country1 && country2) {
             queryConditions.push({
